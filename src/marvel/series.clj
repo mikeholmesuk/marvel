@@ -1,10 +1,53 @@
 (ns marvel.series
   (:use [marvel.core :only [api-action]]))
 
-;;GET/v1/public/series Fetches lists of series.
-;;GET /v1/public/series/{seriesId} Fetches a single comic series by id.
-;;GET /v1/public/series/{seriesId}/characters Fetches lists of characters filtered by a series id.
-;;GET /v1/public/series/{seriesId}/comics Fetches lists of comics filtered by a series id.
-;;GET /v1/public/series/{seriesId}/creators Fetches lists of creators filtered by a series id.
-;;GET /v1/public/series/{seriesId}/events Fetches lists of events filtered by a series id.
-;;GET /v1/public/series/{seriesId}/stories Fetches lists of stories filtered by a series id.
+(defn get-series
+  "Retrieves a list of series"
+  [& [options]]
+    (let [opts (or options {})]
+      (api-action :get "series" opts)))
+
+(defn get-serie-by-id
+  "Retrieves an series record based on a provided ID"
+  [id & [options]]
+    (let [opts (or options {})]
+      (api-action :get (format "series/%s" id) opts)))
+
+(defn get-series-characters
+  "Retrieves the characters associated with a provided series ID"
+  [id & [options]]
+    (let [opts (or options {})]
+      (api-action :get (format "series/%s/characters" id) opts)))
+
+(defn get-series-comics
+  "Retrieves the comics associated with a provided series ID"
+  [id & [options]]
+    (let [opts (or options {})]
+      (api-action :get (format "series/%s/comics" id) opts)))
+
+(defn get-series-creators
+  "Retrieves the creators associated with a provided series ID"
+  [id & [options]]
+    (let [opts (or options {})]
+      (api-action :get (format "series/%s/creators" id) opts)))
+
+(defn get-series-events
+  "Retrieves the events associated with a provided series ID"
+  [id & [options]]
+    (let [opts (or options {})]
+      (api-action :get (format "series/%s/events" id) opts)))
+
+(defn get-series-comics
+  "Retrieves the comics associated with a provided series ID"
+  [id & [options]]
+    (let [opts (or options {})]
+      (api-action :get (format "series/%s/comics" id) opts)))
+
+(use 'marvel.core)
+
+
+
+
+(get-series {:limit 1})
+
+

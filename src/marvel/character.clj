@@ -1,39 +1,39 @@
 (ns marvel.character
   (:use [marvel.core :only [api-action]]))
 
-
-;(api-action :get "characters")
-
 (defn get-characters
   "Retrieves a list of characters"
-  [options]
-    (api-action :get "characters" options))
+  [& options]
+    (let [opts (or options {})]
+      (api-action :get "characters" opts)))
 
-(defn get-character
+(defn get-character-by-id
   "Retrieves a character record based on a provided ID"
-  [id options]
-    (api-action :get (format "characters/%s" id) options))
+  [id & options]
+    (let [opts (or options {})]
+      (api-action :get (format "characters/%s" id) opts)))
 
-;; comics
 (defn get-character-comics
   "Retrieves the comics for a provided character ID"
-  [id options]
-    (api-action :get (format "characters/%s/comics" id) options))
+  [id & options]
+    (let [opts (or options {})]
+      (api-action :get (format "characters/%s/comics" id) opts)))
 
 (defn get-character-events
   "Retrieves the events for a provided character ID"
-  [id options]
-    (api-action :get (format "characters/%s/events" id) options))
+  [id & options]
+    (let [opts (or options {})]
+      (api-action :get (format "characters/%s/events" id) opts)))
 
-
-;; series
 (defn get-character-series
   "Retrieves the series for a provided character ID"
-  [id options]
-    (api-action :get (format "characters/%s/series" id) options))
+  [id & options]
+    (let [opts (or options {})]
+      (api-action :get (format "characters/%s/series" id) opts)))
 
 ;; stories
 (defn get-character-stories
   "Retrieves the stories for a provided character ID"
-  [id options]
-    (api-action :get (format "characters/%s/stories" id) options))
+  [id & options]
+    (let [opts (or options {})]
+      (api-action :get (format "characters/%s/stories" id) options)))

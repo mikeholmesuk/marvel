@@ -1,10 +1,44 @@
 (ns marvel.event
   (:use [marvel.core :only [api-action]]))
 
-;;GET /v1/public/events Fetches lists of events.
-;;GET /v1/public/events/{eventId} Fetches a single event by id.
-;;GET /v1/public/events/{eventId}/characters Fetches lists of characters filtered by an event id.
-;;GET /v1/public/events/{eventId}/comics Fetches lists of comics filtered by an event id.
-;;GET /v1/public/events/{eventId}/creators Fetches lists of creators filtered by an event id.
-;;GET /v1/public/events/{eventId}/series Fetches lists of series filtered by an event id.
-;;GET /v1/public/events/{eventId}/stories Fetches lists of stories filtered by an event id.
+(defn get-events
+  "Retrieves a list of events"
+  [& options]
+    (let [opts (or options {})]
+      (api-action :get "events" opts)))
+
+(defn get-event-by-id
+  "Retrieves an event record based on a provided ID"
+  [id & options]
+    (let [opts (or options {})]
+      (api-action :get (format "event/%s" id) opts)))
+
+(defn get-event-characters
+  "Retrieves the characters associated with a provided event ID"
+  [id & options]
+    (let [opts (or options {})]
+      (api-action :get (format "event/%s/characters" id) opts)))
+
+(defn get-event-comics
+  "Retrieves the comics associated with a provided event ID"
+  [id & options]
+    (let [opts (or options {})]
+      (api-action :get (format "event/%s/comics" id) opts)))
+
+(defn get-event-characters
+  "Retrieves the creators associated for a provided event ID"
+  [id & options]
+    (let [opts (or options {})]
+      (api-action :get (format "event/%s/creators" id) opts)))
+
+(defn get-event-series
+  "Retrieves the series associated with a provided event ID"
+  [id & options]
+    (let [opts (or options {})]
+      (api-action :get (format "event/%s/series" id) opts)))
+
+(defn get-event-stories
+  "Retrieves the stories associated with a provided event ID"
+  [id & options]
+    (let [opts (or options {})]
+      (api-action :get (format "event/%s/characters" id) opts)))
