@@ -20,18 +20,29 @@
     (reset! private-api-key private-key)
     (reset! marvel-host host)))
 
-(defn format-url
+(defn format-api-url
   "Create a marvel URL for requesting data"
   [path params]
+    (-> (url/url (str "http://" @marvel-host))
+        (merge {:port 80
+                :path (str "/v1/public/" path)
+                :query (merge (auth-map) params)})
+        str))
+
+(defn format-resource-url
+  "Create a url for retrieving resource URI data"
+  [resource-path params]
+    (-> (url/url resource-path)
+        (merge {:port 80
+                :query (merge (auth-map) params)})
+        str))
+
+(defn auth-map
+  "Creates the authorisation elements required to connect with the Marvel API (returns a map)"
+  []
     (let [current-timestamp (System/currentTimeMillis)
           md5-hash (pan/md5 (str current-timestamp @private-api-key @public-api-token))]
-      (-> (url/url (str "http://" @marvel-host))
-          (merge {:port 80
-                  :path (str "/v1/public/" path)
-                  :query (merge {:ts current-timestamp
-                                 :apikey @public-api-token
-                                 :hash md5-hash} params)})
-          str)))
+      {:ts current-timestamp :hash md5-hash :apikey @public-api-token}))
 
 (defn parse-request-body
   "Parses a request body and returns JSON as a map"
@@ -43,7 +54,7 @@
 (defn make-request
   "Makes the HTTP request to the target URL"
   [method path params & body]
-  (let [req {:url (format-url path params)
+  (let [req {:url (format-api-url path params)
              :method method
              :content-type :json}
         req (if (#{:post :put :delete} method) (assoc req :body (json/generate-string (first body))) req)]
@@ -55,6 +66,11 @@
   ([method path params] (api-action method path params nil))
   ([method path params body] (parse-request-body (http/request (make-request method path params body)))))
 
-;(defn resource-action
-;  "Makes a call for a provided resource URL"
-;  ([method resource-url params] ()))
+(defn resource-action
+  "Makes a call out to the Marvel API for Resource URIs"
+  [resource-path & options]
+    (let [opts (or options {})
+          req {:url (format-resource-url resource-path opts)
+               :method :get
+               :content-type :json}]
+      (parse-request-body (http/request req))))
