@@ -20,6 +20,13 @@
     (reset! private-api-key private-key)
     (reset! marvel-host host)))
 
+(defn auth-map
+  "Creates the authorisation elements required to connect with the Marvel API (returns a map)"
+  []
+    (let [current-timestamp (System/currentTimeMillis)
+          md5-hash (pan/md5 (str current-timestamp @private-api-key @public-api-token))]
+      {:ts current-timestamp :hash md5-hash :apikey @public-api-token}))
+
 (defn format-api-url
   "Create a marvel URL for requesting data"
   [path params]
@@ -36,13 +43,6 @@
         (merge {:port 80
                 :query (merge (auth-map) params)})
         str))
-
-(defn auth-map
-  "Creates the authorisation elements required to connect with the Marvel API (returns a map)"
-  []
-    (let [current-timestamp (System/currentTimeMillis)
-          md5-hash (pan/md5 (str current-timestamp @private-api-key @public-api-token))]
-      {:ts current-timestamp :hash md5-hash :apikey @public-api-token}))
 
 (defn parse-request-body
   "Parses a request body and returns JSON as a map"
